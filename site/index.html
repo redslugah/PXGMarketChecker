@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PXG Loot API Viewer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Dados do Mercado - PXG</h1>
+
+  <button onclick="loadData('market')">Ver Vigente</button>
+  <button onclick="loadData('market/hist')">Ver Histórico</button>
+
+  <table border="1" id="resultTable">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Vendedor</th>
+        <th>Quantidade</th>
+        <th>Preço</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="script.js"></script>
+</body>
+</html>
