@@ -25,7 +25,13 @@ function loadData(endpoint) {
 }
 
 function buscarItem() {
+  const loadingEl = document.getElementById('loading');
+  loadingEl.style.display = 'block'; // mostra o loading
   const nome = document.getElementById('searchInput').value.trim();
+   if (!nome) {
+    loadingEl.style.display = 'none';
+    return;
+  }
   const nomeSemEspaco = nome.replace(/\s+/g, '');
   if (!nomeSemEspaco) return;
 
@@ -46,6 +52,9 @@ function buscarItem() {
     .catch(err => {
       alert('Erro ao carregar dados: ' + err);
       console.error(err);
+    })
+    .finally(() => {
+      loadingEl.style.display = 'none'; // sempre esconde o loading no final
     });
 }
 
