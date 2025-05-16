@@ -23,3 +23,23 @@ function loadData(endpoint) {
       alert("Erro ao carregar dados: " + error);
     });
 }
+
+function buscarItem() {
+  const nome = document.getElementById('searchInput').value.trim();
+  if (!nome) return;
+
+  fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nome)}`)
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('itemList');
+      list.innerHTML = '';
+
+      const nomesUnicos = [...new Set(data.map(r => r.PVIITNAME))];
+
+      nomesUnicos.forEach(nome => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="item.html?name=${encodeURIComponent(nome)}">${nome}</a>`;
+        list.appendChild(li);
+      });
+    });
+}
