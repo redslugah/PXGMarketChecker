@@ -16,7 +16,7 @@ def search_market():
         return jsonify({'error': 'É necessário fornecer ?name=item'}), 400
 
     conn = get_db_connection()
-    cursor = conn.execute('SELECT * FROM PVIMARKET WHERE PVIITNAME LIKE "?"', (item_name,))
+    cursor = conn.execute('SELECT * FROM PVIMARKET WHERE PVIITNAME LIKE ?', (f"%{item_name}%",))
     results = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return jsonify(results)
@@ -28,7 +28,7 @@ def search_market_hist():
         return jsonify({'error': 'É necessário fornecer ?name=item'}), 400
 
     conn = get_db_connection()
-    cursor = conn.execute('SELECT * FROM PHIMARKET WHERE PHIITNAME LIKE "?" ORDER BY PHICRDATE ASC', (item_name,))
+    cursor = conn.execute('SELECT * FROM PHIMARKET WHERE PHIITNAME LIKE ? ORDER BY PHICRDATE ASC', (f"%{item_name}%",))
     results = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return jsonify(results)
