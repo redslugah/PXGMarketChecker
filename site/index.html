@@ -8,6 +8,9 @@
 </head>
 <body>
   <h1>Dados do Mercado - PXG</h1>
+  <input type="text" id="searchInput" placeholder="Digite o nome do item">
+    <button onclick="buscarItem()">Buscar</button>
+    <ul id="itemList"></ul>
 
   <button onclick="loadData('market')">Ver Vigente</button>
   <button onclick="loadData('market/hist')">Ver Histórico</button>
