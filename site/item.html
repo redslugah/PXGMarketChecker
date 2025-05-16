@@ -7,8 +7,26 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1 id="itemTitle">Carregando...</h1>
-  <canvas id="priceChart" width="800" height="300"></canvas>
+  <h1 id="itemTitle">NOME DO ITEM</h1>
+  <div class="top-controls">
+    <a class="back-button" href="index.html">← Voltar</a>
+  </div>
+  <div class="content-layout">
+    <div class="left-info">
+      <div class="stats-box">
+        <h3>Estatísticas</h3>
+        <p><strong>Média:</strong> <span id="mediaValor">-</span></p>
+        <p><strong>Máximo:</strong> <span id="maxValor">-</span></p>
+        <p><strong>Mínimo:</strong> <span id="minValor">-</span></p>
+      </div>
+      <div class="item-details">
+        <h3>Detalhes sobre o item (WIP)</h3>
+      </div>
+    </div>
+    <div class="right-chart">
+      <canvas id="priceChart" width="800" height="300"></canvas>
+    </div>
+  </div>
   <div class="tables-container">
     <div>
       <div class="table-title">Histórico</div>
