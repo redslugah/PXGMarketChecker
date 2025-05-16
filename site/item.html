@@ -1,44 +1,30 @@
-<h1 id="itemTitle"></h1>
-<canvas id="priceChart" width="600" height="300"></canvas>
-<table id="itemTable"></table>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-const params = new URLSearchParams(window.location.search);
-const itemName = params.get('name');
-
-document.getElementById('itemTitle').textContent = itemName;
-
-// Requisição para dados históricos
-fetch(`https://pxghelperapi.onrender.com/market/hist/search?name=${encodeURIComponent(itemName)}`)
-  .then(res => res.json())
-  .then(data => {
-    const dates = data.map(r => r.PHICRDATE.split(' ')[0]);
-    const prices = data.map(r => r.PHIUPRICE);
-
-    new Chart(document.getElementById('priceChart'), {
-      type: 'line',
-      data: {
-        labels: dates,
-        datasets: [{
-          label: 'Preço ao longo do tempo',
-          data: prices,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          tension: 0.2,
-        }]
-      }
-    });
-
-    const table = document.getElementById('itemTable');
-    table.innerHTML = '<tr><th>Vendedor</th><th>Qtd</th><th>Preço</th><th>Data</th></tr>';
-    data.forEach(r => {
-      table.innerHTML += `<tr>
-        <td>${r.PHIUSNAME}</td>
-        <td>${r.PHIQNTITY}</td>
-        <td>${r.PHIUPRICE}</td>
-        <td>${r.PHICRDATE}</td>
-      </tr>`;
-    });
-  });
-</script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>PXG - Detalhes do Item</title>
+  <link rel="stylesheet" href="styleItem.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1 id="itemTitle">Carregando...</h1>
+  <canvas id="priceChart" width="800" height="300"></canvas>
+  <div class="tables-container">
+    <div>
+      <div class="table-title">Histórico</div>
+      <table id="histTable">
+        <thead><tr><th>Vendedor</th><th>Qtd</th><th>Preço</th><th>Data</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div>
+      <div class="table-title">Vigente</div>
+      <table id="vigenteTable">
+        <thead><tr><th>Vendedor</th><th>Qtd</th><th>Preço</th><th>Data</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <script src="scriptItem.js"></script>
+</body>
+</html>
