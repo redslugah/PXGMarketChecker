@@ -2,12 +2,12 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlite3
 import os
+from flask import request
 
 app = Flask(__name__)
 CORS(app)
 CORS(app, origins=["https://redslugah.github.io"])
-
-from flask import request
+DB_PATH = 'pxg_log.db'
 
 @app.route('/market/search')
 def search_market():
@@ -28,12 +28,10 @@ def search_market_hist():
         return jsonify({'error': 'É necessário fornecer ?name=item'}), 400
 
     conn = get_db_connection()
-    cursor = conn.execute('SELECT * FROM PHIMARKET WHERE PHIITNAME LIKE ? ORDER BY PHICRDATE ASC', (f"%{item_name}%",))
+    cursor = conn.execute('SELECT * FROM PHIMARKET WHERE PHIITNAME = ?', (item_name,))
     results = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return jsonify(results)
-
-DB_PATH = 'pxg_log.db'
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)
