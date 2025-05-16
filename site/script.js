@@ -41,5 +41,10 @@ function buscarItem() {
         li.innerHTML = `<a href="item.html?name=${encodeURIComponent(nome)}">${nome}</a>`;
         list.appendChild(li);
       });
+    })
+    .catch(err => {
+      alert('Erro ao carregar dados: ' + err);
+      console.error(err);
     });
 }
+
