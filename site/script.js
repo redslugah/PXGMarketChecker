@@ -26,9 +26,10 @@ function loadData(endpoint) {
 
 function buscarItem() {
   const nome = document.getElementById('searchInput').value.trim();
-  if (!nome) return;
+  const nomeSemEspaco = nome.replace(/\s+/g, '');
+  if (!nomeSemEspaco) return;
 
-  fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nome)}`)
+  fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nomeSemEspaco)}`)
     .then(res => res.json())
     .then(data => {
       const list = document.getElementById('itemList');
@@ -36,9 +37,9 @@ function buscarItem() {
 
       const nomesUnicos = [...new Set(data.map(r => r.PVIITNAME))];
 
-      nomesUnicos.forEach(nome => {
+      nomesUnicos.forEach(nomeSemEspaco => {
         const li = document.createElement('li');
-        li.innerHTML = `<a href="item.html?name=${encodeURIComponent(nome)}">${nome}</a>`;
+        li.innerHTML = `<a href="item.html?name=${encodeURIComponent(nomeSemEspaco)}">${nomeSemEspaco}</a>`;
         list.appendChild(li);
       });
     })
