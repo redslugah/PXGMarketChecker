@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlite3
 import os
@@ -6,6 +6,32 @@ import os
 app = Flask(__name__)
 CORS(app)
 CORS(app, origins=["https://redslugah.github.io"])
+
+from flask import request
+
+@app.route('/market/search')
+def search_market():
+    item_name = request.args.get('name')
+    if not item_name:
+        return jsonify({'error': 'É necessário fornecer ?name=item'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.execute('SELECT * FROM PVIMARKET WHERE PVIITNAME LIKE "?"', (item_name,))
+    results = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return jsonify(results)
+
+@app.route('/market/hist/search')
+def search_market_hist():
+    item_name = request.args.get('name')
+    if not item_name:
+        return jsonify({'error': 'É necessário fornecer ?name=item'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.execute('SELECT * FROM PHIMARKET WHERE PHIITNAME LIKE "?" ORDER BY PHICRDATE ASC', (item_name,))
+    results = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return jsonify(results)
 
 DB_PATH = 'pxg_log.db'
 
