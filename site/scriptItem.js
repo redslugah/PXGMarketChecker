@@ -96,7 +96,7 @@ function atualizarGraficoEEstatisticas() {
   const avgPrices = [];
   Object.keys(priceMap).sort().forEach(date => {
     const { total, quantidade } = priceMap[date];
-    const media = total / quantidade;
+    const media = Math.round(total / quantidade);
     labels.push(date);
     avgPrices.push(media);
   });
@@ -128,7 +128,7 @@ function atualizarGraficoEEstatisticas() {
 
   // Estatísticas na tela
   if (precosFiltrados.length) {
-    const media = (precosFiltrados.reduce((a, b) => a + b, 0) / precosFiltrados.length).toFixed(2);
+    const media = Math.round(precosFiltrados.reduce((a, b) => a + b, 0) / precosFiltrados.length).toFixed(2);
     const max = Math.max(...precosFiltrados);
     const min = Math.min(...precosFiltrados);
     document.getElementById('mediaValor').textContent = media;
