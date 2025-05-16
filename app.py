@@ -5,6 +5,8 @@ import os
 
 app = Flask(__name__)
 CORS(app)
+CORS(app, origins=["https://redslugah.github.io"])
+
 DB_PATH = 'pxg_log.db'
 
 def get_db_connection():
