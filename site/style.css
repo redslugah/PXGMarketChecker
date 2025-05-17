@@ -23,3 +23,24 @@ button {
   padding: 10px 15px;
   cursor: pointer;
 }
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: #eee;
+  flex: 1;
+}
+
+#loading {
+  text-align: center;
+  font-style: italic;
+  color: #ccc;
+}

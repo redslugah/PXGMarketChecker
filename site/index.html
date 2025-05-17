@@ -3,34 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PXG Loot API Viewer</title>
+  <title>PXG Market Viewer</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Dados do Mercado - PXG WIND</h1>
-  <input type="text" id="searchInput" placeholder="Digite o nome do item">
+  <h1>Mercado PXG WIND</h1>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Digite o nome do item" />
     <button onclick="buscarItem()">Buscar</button>
-    <ul id="itemList"></ul>
-    <div id="loading" style="display:none; color:#ccc; font-style: italic; text-align:center; margin-top: 20px;">
-      Carregando itens...
-    </div>
+  </div>
 
-  <!-- <button onclick="loadData('market')">Ver Vigente</button>
-  <button onclick="loadData('market/hist')">Ver Histórico</button> -->
+  <div id="loading" style="display:none;">Carregando itens...</div>
 
-  <!-- <table border="1" id="resultTable">
+  <table id="resultTable" style="display:none;">
     <thead>
       <tr>
         <th>Item</th>
-        <th>Vendedor</th>
         <th>Quantidade</th>
-        <th>Preço</th>
-        <th>Data</th>
+        <th>Menor Preço</th>
+        <th>Maior Preço</th>
       </tr>
     </thead>
     <tbody></tbody>
-  </table> -->
+  </table>
 
-  <script src="script.js?v=1"></script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>

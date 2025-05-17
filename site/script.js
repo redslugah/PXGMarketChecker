@@ -26,35 +26,51 @@ function loadData(endpoint) {
 
 function buscarItem() {
   const loadingEl = document.getElementById('loading');
-  loadingEl.style.display = 'block'; // mostra o loading
-  const nome = document.getElementById('searchInput').value.trim();
-   if (!nome) {
-    loadingEl.style.display = 'none';
-    return;
-  }
-  const nomeSemEspaco = nome.replace(/\s+/g, '');
-  if (!nomeSemEspaco) return;
+  const table = document.getElementById('resultTable');
+  const tbody = table.querySelector('tbody');
+  const nome = document.getElementById('searchInput').value.trim().replace(/\s+/g, '');
+  if (!nome) return;
 
-  fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nomeSemEspaco)}`)
+  loadingEl.style.display = 'block';
+  table.style.display = 'none';
+  tbody.innerHTML = '';
+
+  fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nome)}`)
     .then(res => res.json())
     .then(data => {
-      const list = document.getElementById('itemList');
-      list.innerHTML = '';
+      loadingEl.style.display = 'none';
 
-      const nomesUnicos = [...new Set(data.map(r => r.PVIITNAME))];
+      const agrupado = {};
 
-      nomesUnicos.forEach(nomeSemEspaco => {
-        const li = document.createElement('li');
-        li.innerHTML = `<a href="item.html?name=${encodeURIComponent(nomeSemEspaco)}">${nomeSemEspaco}</a>`;
-        list.appendChild(li);
+      data.forEach(row => {
+        const nome = row.PVIITNAME;
+        if (!agrupado[nome]) {
+          agrupado[nome] = {
+            total: 0,
+            min: row.PVIUPRICE,
+            max: row.PVIUPRICE
+          };
+        }
+        agrupado[nome].total += row.PVIQNTITY;
+        if (row.PVIUPRICE < agrupado[nome].min) agrupado[nome].min = row.PVIUPRICE;
+        if (row.PVIUPRICE > agrupado[nome].max) agrupado[nome].max = row.PVIUPRICE;
       });
+
+      Object.entries(agrupado).forEach(([nome, info]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><a href="item.html?name=${encodeURIComponent(nome)}">${nome}</a></td>
+          <td>${info.total}</td>
+          <td>${info.min}</td>
+          <td>${info.max}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      table.style.display = '';
     })
     .catch(err => {
       alert('Erro ao carregar dados: ' + err);
-      console.error(err);
-    })
-    .finally(() => {
-      loadingEl.style.display = 'none'; // sempre esconde o loading no final
+      loadingEl.style.display = 'none';
     });
 }
-
