@@ -9,8 +9,13 @@
 <body>
   <h1 id="itemTitle">NOME DO ITEM</h1>
   <div class="top-controls">
-    <button id="toggleMedia">Tipo de média: 50% lower</button>
+    <button id="toggleMedia">Tipo de média: Sem outliers</button>
     <button id="voltar">← Voltar</button>
+    <select id="rangeSelect">
+      <option value="7">Últimos 7 dias</option>
+      <option value="15" selected>Últimos 15 dias</option>
+      <option value="30">Últimos 30 dias</option>
+    </select>
   </div>
   <div class="content-layout">
     <div class="left-info">
@@ -22,7 +27,6 @@
       </div>
       <div class="item-details">
         <h3>Detalhes sobre o item (WIP)</h3>
-        <h3>Valores distantes da média são ignorados</h3>
       </div>
     </div>
     <div class="right-chart">

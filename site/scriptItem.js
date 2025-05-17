@@ -10,7 +10,14 @@ let histData = [];
 let vigData = [];
 let mediaGlobal = 0;
 let desvioGlobal = 0;
-let modoMedia = 'metade_baixa'; // 'sem_outliers'/'metade_baixa'
+let modoMedia = 'sem_outliers'; // 'sem_outliers'/'metade_baixa'
+
+let diasExibir = 15;
+document.getElementById('rangeSelect').addEventListener('change', e => {
+  diasExibir = parseInt(e.target.value);
+  atualizarGraficoEEstatisticas();
+});
+
 
 // Função auxiliar
 function adicionarAoMapa(dia, preco, qtd) {
@@ -91,10 +98,22 @@ function atualizarGraficoEEstatisticas() {
     }
   });
 
+  //console.log("Datas em priceMap:", Object.keys(priceMap));
+
   // Preparar dados para o gráfico
   const labels = [];
   const avgPrices = [];
-  Object.keys(priceMap).sort().forEach(date => {
+  const todasDatas = Object.keys(priceMap).sort();
+  const ultimaData = new Date(todasDatas[todasDatas.length - 1]);
+  const limiteData = new Date(todasDatas[todasDatas.length - 1]);
+  limiteData.setDate(limiteData.getDate() - diasExibir + 1);
+
+
+  const ultimasDatas = todasDatas.filter(dataStr => {
+  return dataStr >= limiteData.toISOString().slice(0, 10);
+  });
+
+  ultimasDatas.forEach(date => {
     const { total, quantidade } = priceMap[date];
     const media = Math.round(total / quantidade);
     labels.push(date);
