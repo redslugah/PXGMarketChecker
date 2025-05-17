@@ -44,29 +44,42 @@ function buscarItem() {
 
       data.forEach(row => {
         const nome = row.PVIITNAME;
+        const preco = row.PVIUPRICE;
+        const qtd = row.PVIQNTITY;
+
         if (!agrupado[nome]) {
           agrupado[nome] = {
             total: 0,
-            min: row.PVIUPRICE,
-            max: row.PVIUPRICE
+            min: null,
+            max: null
           };
         }
-        agrupado[nome].total += row.PVIQNTITY;
-        if (row.PVIUPRICE < agrupado[nome].min) agrupado[nome].min = row.PVIUPRICE;
-        if (row.PVIUPRICE > agrupado[nome].max) agrupado[nome].max = row.PVIUPRICE;
+
+        agrupado[nome].total += qtd;
+
+        if (preco !== null) {
+          if (agrupado[nome].min === null || preco < agrupado[nome].min) {
+            agrupado[nome].min = preco;
+          }
+          if (agrupado[nome].max === null || preco > agrupado[nome].max) {
+            agrupado[nome].max = preco;
+          }
+        }
       });
 
       Object.entries(agrupado).forEach(([nome, info]) => {
+        const min = info.min === null ? '-' : info.min;
+        const max = info.max === null ? '-' : info.max;
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><a href="item.html?name=${encodeURIComponent(nome)}">${nome}</a></td>
           <td>${info.total}</td>
-          <td>${info.min}</td>
-          <td>${info.max}</td>
+          <td>${min}</td>
+          <td>${max}</td>
         `;
         tbody.appendChild(tr);
       });
-
       table.style.display = '';
     })
     .catch(err => {
