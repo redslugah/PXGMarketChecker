@@ -1,5 +1,11 @@
 const API_URL = 'https://pxghelperapi.onrender.com';
 
+document.getElementById("searchInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    buscarItem();
+  }
+});
+
 function loadData(endpoint) {
   fetch(`${API_URL}/${endpoint}`)
     .then(res => res.json())
