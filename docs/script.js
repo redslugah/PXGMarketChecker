@@ -34,14 +34,14 @@ function buscarItem() {
   const loadingEl = document.getElementById('loading');
   const table = document.getElementById('resultTable');
   const tbody = table.querySelector('tbody');
-  const nome = document.getElementById('searchInput').value.trim().replace(/\s+/g, '');
-  if (!nome) return;
+  const nomeBuscado = document.getElementById('searchInput').value.trim().replace(/\s+/g, '');
+  if (!nomeBuscado) return;
 
   loadingEl.style.display = 'block';
   table.style.display = 'none';
   tbody.innerHTML = '';
 
-  fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nome)}`)
+  fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nomeBuscado)}`)
     .then(res => res.json())
     .then(data => {
       loadingEl.style.display = 'none';
@@ -73,6 +73,16 @@ function buscarItem() {
         }
       });
 
+      // Se não houver dados, ainda assim adiciona o nome buscado
+      const nomesEncontrados = Object.keys(agrupado);
+      if (nomesEncontrados.length === 0) {
+        agrupado[nomeBuscado] = {
+          total: 0,
+          min: null,
+          max: null
+        };
+      }
+
       Object.entries(agrupado).forEach(([nome, info]) => {
         const min = info.min === null ? '-' : info.min;
         const max = info.max === null ? '-' : info.max;
@@ -86,6 +96,7 @@ function buscarItem() {
         `;
         tbody.appendChild(tr);
       });
+
       table.style.display = '';
     })
     .catch(err => {
