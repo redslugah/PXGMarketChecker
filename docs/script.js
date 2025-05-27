@@ -44,8 +44,6 @@ function buscarItem() {
   fetch(`https://pxghelperapi.onrender.com/market/search?name=${encodeURIComponent(nomeBuscado)}`)
     .then(res => res.json())
     .then(data => {
-      loadingEl.style.display = 'none';
-
       const agrupado = {};
 
       data.forEach(row => {
@@ -73,34 +71,56 @@ function buscarItem() {
         }
       });
 
-      // Se não houver dados, ainda assim adiciona o nome buscado
       const nomesEncontrados = Object.keys(agrupado);
-      if (nomesEncontrados.length === 0) {
-        agrupado[nomeBuscado] = {
-          total: 0,
-          min: null,
-          max: null
-        };
+
+      if (nomesEncontrados.length > 0) {
+        // Monta a tabela normalmente
+        preencherTabela(agrupado);
+        loadingEl.style.display = 'none';
+        table.style.display = '';
+      } else {
+        // Verifica se existe no histórico
+        fetch(`https://pxghelperapi.onrender.com/market/hist/search?name=${encodeURIComponent(nomeBuscado)}`)
+          .then(res => res.json())
+          .then(histData => {
+            loadingEl.style.display = 'none';
+            if (histData.length > 0) {
+              const agrupadoHist = {};
+              agrupadoHist[nomeBuscado] = {
+                total: 0,
+                min: null,
+                max: null
+              };
+              preencherTabela(agrupadoHist);
+              table.style.display = '';
+            } else {
+              alert("Item não encontrado no mercado nem no histórico.");
+            }
+          });
       }
-
-      Object.entries(agrupado).forEach(([nome, info]) => {
-        const min = info.min === null ? '-' : info.min;
-        const max = info.max === null ? '-' : info.max;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><a href="item.html?name=${encodeURIComponent(nome)}">${nome}</a></td>
-          <td>${info.total}</td>
-          <td>${min}</td>
-          <td>${max}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      table.style.display = '';
     })
     .catch(err => {
       alert('Erro ao carregar dados: ' + err);
       loadingEl.style.display = 'none';
     });
+}
+
+function preencherTabela(agrupado) {
+  const table = document.getElementById('resultTable');
+  const tbody = table.querySelector('tbody');
+  tbody.innerHTML = '';
+
+  Object.entries(agrupado).forEach(([nome, info]) => {
+    const min = info.min === null ? '-' : info.min;
+    const max = info.max === null ? '-' : info.max;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><a href="item.html?name=${encodeURIComponent(nome)}">${nome}</a></td>
+      <td>${info.total}</td>
+      <td>${min}</td>
+      <td>${max}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
